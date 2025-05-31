@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Number Guessing Game</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+        }
+        .game-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 1.1em;
+            margin: 10px 0;
+        }
+        input {
+            padding: 10px;
+            width: 80%;
+            max-width: 200px;
+            margin: 10px 0;
+            border: 2px solid #3498db;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        #feedback {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+        #restart {
+            display: none;
+            background: #2ecc71;
+        }
+        #restart:hover {
+            background: #27ae60;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Number Guessing Game</h1>
+        <p>Guess a number between 1 and 100!</p>
+        <p>Attempts left: <span id="attempts">10</span></p>
+        <input type="number" id="guessInput" min="1" max="100" placeholder="Enter your guess">
+        <button onclick="checkGuess()">Submit Guess</button>
+        <button id="restart" onclick="startGame()">Play Again</button>
+        <p id="feedback"></p>
+    </div>
+
+    <script>
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+        let attempts = 10;
+
+        function startGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            attempts = 10;
+            document.getElementById('attempts').innerText = attempts;
+            document.getElementById('guessInput').value = '';
+            document.getElementById('feedback').innerText = '';
+            document.getElementById('guessInput').disabled = false;
+            document.getElementById('restart').style.display = 'none';
+        }
+
+        function checkGuess() {
+            const guess = parseInt(document.getElementById('guessInput').value);
+            const feedback = document.getElementById('feedback');
+            const attemptsDisplay = document.getElementById('attempts');
+
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                feedback.innerText = 'Please enter a number between 1 and 100!';
+                return;
+            }
+
+            attempts--;
+            attemptsDisplay.innerText = attempts;
+
+            if (guess === targetNumber) {
+                feedback.style.color = '#2ecc71';
+                feedback.innerText = 'Congratulations! You guessed the number!';
+                endGame();
+            } else if (attempts === 0) {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = `Game Over! The number was ${targetNumber}.`;
+                endGame();
+            } else if (guess < targetNumber) {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = 'Too low! Try again.';
+            } else {
+                feedback.style.color = '#e74c3c';
+                feedback.innerText = 'Too high! Try again.';
+            }
+        }
+
+        function endGame() {
+            document.getElementById('guessInput').disabled = true;
+            document.getElementById('restart').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
